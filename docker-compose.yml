@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./user:/app
+
+  mongo:
+    image: mongo:6-jammy
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: inventory
+      MONGO_INITDB_ROOT_USERNAME: dejan
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
