@@ -4,8 +4,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/Dejan91/inventory-management/user/db"
-	"github.com/Dejan91/inventory-management/user/model"
+	"github.com/Dejan91/inventory-management/user/gapi"
+	"github.com/Dejan91/inventory-management/user/store"
 	"github.com/Dejan91/inventory-management/user/util"
+	"google.golang.org/api/option"
+	"log"
+
+	firebase "firebase.google.com/go/v4"
 )
 
 func main() {
@@ -20,13 +25,23 @@ func main() {
 		panic(err)
 	}
 
-	user, err := mongoDB.Create(context.Background(), &model.User{
-		Username: "dejan",
-		Email:    "test@test.com",
-	})
+	ctx := context.Background()
+	opt := option.WithCredentialsFile("credentials/inventory-management-1f296-store-adminsdk-cre40-d6530cc61f.json")
+	conf := &firebase.Config{ProjectID: config.FirebaseProjectID}
+	firebaseApp, err := firebase.NewApp(ctx, conf, opt)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalf("error initializing store app: %v\n", err)
 	}
 
-	fmt.Println(user)
+	authClient, err := firebaseApp.Auth(context.Background())
+	if err != nil {
+		log.Fatalf("Failed to create Firebase auth client: %v", err)
+	}
+	firebaseStore := store.NewFirebaseStore(authClient)
+
+	server := gapi.NewServer(config, mongoDB, firebaseStore)
+	err = server.Run()
+	if err != nil {
+		log.Fatal("error running gRPC server", err)
+	}
 }

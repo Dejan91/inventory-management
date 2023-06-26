@@ -10,8 +10,8 @@ import (
 )
 
 type DB interface {
-	GetByEmail(ctx context.Context, email string) (*model.User, error)
-	Create(ctx context.Context, user *model.User) (*model.User, error)
+	GetUser(ctx context.Context, email string) (*model.DBUser, error)
+	CreateUser(ctx context.Context, user *model.DBUser) (*model.DBUser, error)
 }
 
 type MongoDB struct {

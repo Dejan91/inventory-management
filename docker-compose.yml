@@ -9,7 +9,7 @@ services:
       - mongo
     restart: always
     ports:
-      - "8080:80"
+      - "9090:9090"
     volumes:
       - ./user:/app
 

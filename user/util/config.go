@@ -3,10 +3,12 @@ package util
 import "github.com/spf13/viper"
 
 type Config struct {
-	DBUser     string `mapstructure:"DB_USER"`
-	DBPassword string `mapstructure:"DB_PASSWORD"`
-	DBHost     string `mapstructure:"DB_HOST"`
-	DBName     string `mapstructure:"DB_NAME"`
+	DBUser            string `mapstructure:"DB_USER"`
+	DBPassword        string `mapstructure:"DB_PASSWORD"`
+	DBHost            string `mapstructure:"DB_HOST"`
+	DBName            string `mapstructure:"DB_NAME"`
+	GrpcServerAddress string `mapstructure:"GRPC_SERVER_ADDRESS"`
+	FirebaseProjectID string `mapstructure:"FIREBASE_PROJECT_ID"`
 }
 
 func LoadConfig(path string) (*Config, error) {
