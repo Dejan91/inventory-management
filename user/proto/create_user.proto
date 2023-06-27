@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/Dejan91/inventory-management/user/pb";
+
+message CreateUserRequest {
+  string auth_uid = 1;
+  string username = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message CreateUserResponse {
+  string uid = 1;
+  string external_uid = 2;
+  string username = 3;
+  string email = 4;
+}

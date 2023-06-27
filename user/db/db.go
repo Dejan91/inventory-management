@@ -10,8 +10,11 @@ import (
 )
 
 type DB interface {
-	GetUser(ctx context.Context, email string) (*model.DBUser, error)
+	Close(ctx context.Context) error
+	GetUserByEmail(ctx context.Context, email string) (*model.DBUser, error)
+	GetUserByUsername(ctx context.Context, username string) (*model.DBUser, error)
 	CreateUser(ctx context.Context, user *model.DBUser) (*model.DBUser, error)
+	DeleteUser(ctx context.Context, uid string) error
 }
 
 type MongoDB struct {
@@ -43,4 +46,8 @@ func NewMongoDB(username, password, host, dbName string) (DB, error) {
 		client: client,
 		dbName: dbName,
 	}, nil
+}
+
+func (m *MongoDB) Close(ctx context.Context) error {
+	return m.client.Disconnect(ctx)
 }

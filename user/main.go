@@ -14,6 +14,8 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		panic(err)
@@ -24,18 +26,23 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer func(mongoDB db.DB, ctx context.Context) {
+		err = mongoDB.Close(ctx)
+		if err != nil {
+			log.Fatal("error closing connection with mongodb")
+		}
+	}(mongoDB, ctx)
 
-	ctx := context.Background()
-	opt := option.WithCredentialsFile("credentials/inventory-management-1f296-store-adminsdk-cre40-d6530cc61f.json")
+	opt := option.WithCredentialsFile("credentials/inventory-management-1f296-firebase-adminsdk-cre40-d6530cc61f.json")
 	conf := &firebase.Config{ProjectID: config.FirebaseProjectID}
 	firebaseApp, err := firebase.NewApp(ctx, conf, opt)
 	if err != nil {
-		log.Fatalf("error initializing store app: %v\n", err)
+		log.Fatalf("error initializing Firebase app: %v\n", err)
 	}
 
 	authClient, err := firebaseApp.Auth(context.Background())
 	if err != nil {
-		log.Fatalf("Failed to create Firebase auth client: %v", err)
+		log.Fatalf("failed to create Firebase auth client: %v", err)
 	}
 	firebaseStore := store.NewFirebaseStore(authClient)
 

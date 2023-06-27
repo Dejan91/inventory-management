@@ -2,8 +2,8 @@ package gapi
 
 import (
 	"fmt"
-	pb "github.com/Dejan91/inventory-management/proto/golang/user"
 	"github.com/Dejan91/inventory-management/user/db"
+	"github.com/Dejan91/inventory-management/user/pb"
 	"github.com/Dejan91/inventory-management/user/store"
 	"github.com/Dejan91/inventory-management/user/util"
 	"google.golang.org/grpc"

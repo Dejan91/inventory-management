@@ -7,6 +7,7 @@ import (
 
 type Store interface {
 	CreateUser(context.Context, *auth.UserToCreate) (*auth.UserRecord, error)
+	DeleteUser(ctx context.Context, uid string) error
 }
 
 type FirebaseStore struct {
@@ -26,4 +27,8 @@ func (f *FirebaseStore) CreateUser(ctx context.Context, user *auth.UserToCreate)
 	}
 
 	return userRecord, nil
+}
+
+func (f *FirebaseStore) DeleteUser(ctx context.Context, uid string) error {
+	return f.client.DeleteUser(ctx, uid)
 }

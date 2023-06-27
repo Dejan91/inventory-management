@@ -9,10 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (m *MongoDB) GetUser(ctx context.Context, uid string) (*model.DBUser, error) {
-	m.client.Database(m.dbName).Collection("users")
+func (m *MongoDB) getUser(ctx context.Context, field, value string) (*model.DBUser, error) {
+	filter := bson.D{{field, value}}
 	coll := m.client.Database(m.dbName).Collection("users")
-	filter := bson.D{{"external_id", uid}}
 
 	var result model.DBUser
 	err := coll.FindOne(ctx, filter).Decode(&result)
@@ -27,6 +26,24 @@ func (m *MongoDB) GetUser(ctx context.Context, uid string) (*model.DBUser, error
 	return &result, nil
 }
 
+func (m *MongoDB) GetUserByEmail(ctx context.Context, email string) (*model.DBUser, error) {
+	user, err := m.getUser(ctx, "email", email)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (m *MongoDB) GetUserByUsername(ctx context.Context, username string) (*model.DBUser, error) {
+	user, err := m.getUser(ctx, "username", username)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func (m *MongoDB) CreateUser(ctx context.Context, user *model.DBUser) (*model.DBUser, error) {
 	createdUser, err := m.client.Database(m.dbName).Collection("users").InsertOne(ctx, user)
 	if err != nil {
@@ -38,4 +55,14 @@ func (m *MongoDB) CreateUser(ctx context.Context, user *model.DBUser) (*model.DB
 	}
 
 	return user, nil
+}
+
+func (m *MongoDB) DeleteUser(ctx context.Context, uid string) error {
+	filter := bson.D{{"uid", uid}}
+	_, err := m.client.Database(m.dbName).Collection("users").DeleteOne(ctx, filter)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

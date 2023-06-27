@@ -7,8 +7,3 @@ type DBUser struct {
 	ExternalID string             `bson:"external_id"`
 	Username   string             `bson:"username"`
 }
-
-type User struct {
-	DBUser
-	Email string
-}
