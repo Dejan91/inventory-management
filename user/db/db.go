@@ -7,14 +7,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 )
 
 type DB interface {
-	Close(ctx context.Context) error
-	GetUserByEmail(ctx context.Context, email string) (*model.DBUser, error)
-	GetUserByUsername(ctx context.Context, username string) (*model.DBUser, error)
 	CreateUser(ctx context.Context, user *model.DBUser) (*model.DBUser, error)
+	GetUser(ctx context.Context, field, value string) (*model.DBUser, error)
+	UpdateUser(ctx context.Context, user *model.DBUser) error
 	DeleteUser(ctx context.Context, uid string) error
+	Transaction(ctx context.Context, fn func() error) error
+	Close(ctx context.Context) error
 }
 
 type MongoDB struct {
@@ -46,6 +48,42 @@ func NewMongoDB(username, password, host, dbName string) (DB, error) {
 		client: client,
 		dbName: dbName,
 	}, nil
+}
+
+func (m *MongoDB) Transaction(ctx context.Context, fn func() error) error {
+	wc := writeconcern.Majority()
+	txnOptions := options.Transaction().SetWriteConcern(wc)
+
+	session, err := m.client.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	err = mongo.WithSession(ctx, session, func(ctx mongo.SessionContext) error {
+		if err = session.StartTransaction(txnOptions); err != nil {
+			return err
+		}
+
+		err = fn()
+		if err != nil {
+			return err
+		}
+
+		if err = session.CommitTransaction(ctx); err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		if err = session.AbortTransaction(ctx); err != nil {
+			return err
+		}
+		return err
+	}
+
+	return nil
 }
 
 func (m *MongoDB) Close(ctx context.Context) error {

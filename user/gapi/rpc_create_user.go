@@ -19,9 +19,9 @@ func (s *Server) CreateUser(ctx context.Context, r *pb.CreateUserRequest) (*pb.C
 		return nil, invalidArgumentError(violations)
 	}
 
-	u, err := s.db.GetUserByUsername(ctx, r.GetUsername())
+	u, err := s.db.GetUser(ctx, "username", r.GetUsername())
 	if err != nil {
-		if !errors.As(err, &mongo.ErrNoDocuments) {
+		if !errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, status.Errorf(codes.Internal, "failed to create user: %s", err)
 		}
 	}
