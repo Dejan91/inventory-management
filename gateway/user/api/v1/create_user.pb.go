@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v4.23.2
-// source: create_user.proto
+// source: gw_create_user.proto
 
 package v1
 

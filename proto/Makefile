@@ -1,6 +1,8 @@
 DIR=user
 
 proto:
+	rm -rf $(DIR)/api/v1/*.go
+
 	protoc --proto_path=$(DIR) \
 		--go_out=$(DIR)/api/v1 --go_opt=paths=source_relative \
 		--go-grpc_out=$(DIR)/api/v1 --go-grpc_opt=paths=source_relative \

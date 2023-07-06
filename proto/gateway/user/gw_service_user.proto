@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package v1;
 
-import "get_user.proto";
-import "create_user.proto";
-import "update_user.proto";
-import "delete_user.proto";
+import "gw_get_user.proto";
+import "gw_create_user.proto";
+import "gw_update_user.proto";
+import "gw_delete_user.proto";
 
 option go_package = "github.com/Dejan91/inventory-management/proto/gateway/user/api/v1";
 

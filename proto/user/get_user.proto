@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package v1;
+package user;
 
-option go_package = "github.com/Dejan91/inventory-management/proto/user/api/v1";
+option go_package = "github.com/Dejan91/inventory-management/proto/user";
 
 message GetUserRequest {
   string auth_uid = 1;

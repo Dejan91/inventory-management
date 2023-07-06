@@ -3,7 +3,7 @@ module github.com/Dejan91/inventory-management/gateway
 go 1.20
 
 require (
-	github.com/Dejan91/inventory-management/proto v0.0.0-20230706160033-aa9f343432dc
+	github.com/Dejan91/inventory-management/proto v0.0.0-20230706164938-4ba5e8dde4fe
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.31.0
 )
