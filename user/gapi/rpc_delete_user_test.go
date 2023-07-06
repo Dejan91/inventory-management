@@ -2,7 +2,7 @@ package gapi
 
 import (
 	"context"
-	"github.com/Dejan91/inventory-management/user/api/v1"
+	"github.com/Dejan91/inventory-management/proto/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/mocks"
 	"github.com/Dejan91/inventory-management/user/model"
 	"github.com/Dejan91/inventory-management/user/util"
