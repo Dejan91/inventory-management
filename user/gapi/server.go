@@ -2,8 +2,8 @@ package gapi
 
 import (
 	"fmt"
+	"github.com/Dejan91/inventory-management/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/db"
-	"github.com/Dejan91/inventory-management/user/pb"
 	"github.com/Dejan91/inventory-management/user/store"
 	"github.com/Dejan91/inventory-management/user/util"
 	"google.golang.org/grpc"
@@ -12,7 +12,7 @@ import (
 )
 
 type Server struct {
-	pb.UnimplementedUserServer
+	v1.UnimplementedUserServer
 	config *util.Config
 	db     db.DB
 	store  store.Store
@@ -28,7 +28,7 @@ func NewServer(config *util.Config, db db.DB, store store.Store) *Server {
 
 func (s *Server) Run() error {
 	grpcServer := grpc.NewServer()
-	pb.RegisterUserServer(grpcServer, s)
+	v1.RegisterUserServer(grpcServer, s)
 	reflection.Register(grpcServer)
 
 	listener, err := net.Listen("tcp", s.config.GrpcServerAddress)

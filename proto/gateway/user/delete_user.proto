@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/Dejan91/inventory-management/user/api";
+
+message DeleteUserRequest {
+  string uid = 1;
+}
+
+message DeleteUserResponse {
+  string message = 1;
+}

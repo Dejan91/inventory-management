@@ -2,9 +2,9 @@ package gapi
 
 import (
 	"context"
+	"github.com/Dejan91/inventory-management/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/mocks"
 	"github.com/Dejan91/inventory-management/user/model"
-	"github.com/Dejan91/inventory-management/user/pb"
 	"github.com/Dejan91/inventory-management/user/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -24,13 +24,13 @@ func TestServer_DeleteUser(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		r             *pb.DeleteUserRequest
+		r             *v1.DeleteUserRequest
 		buildStubs    func(db *mocks.MockDB, store *mocks.MockFirebaseStore)
-		checkResponse func(t *testing.T, res *pb.DeleteUserResponse, err error)
+		checkResponse func(t *testing.T, res *v1.DeleteUserResponse, err error)
 	}{
 		{
 			name: "OK",
-			r: &pb.DeleteUserRequest{
+			r: &v1.DeleteUserRequest{
 				AuthUid: util.RandomUID(),
 				Uid:     uid.Hex(),
 			},
@@ -47,7 +47,7 @@ func TestServer_DeleteUser(t *testing.T) {
 					Once().
 					Return(nil)
 			},
-			checkResponse: func(t *testing.T, res *pb.DeleteUserResponse, err error) {
+			checkResponse: func(t *testing.T, res *v1.DeleteUserResponse, err error) {
 				assert.NoError(t, err)
 				assert.NotNil(t, res)
 
@@ -56,7 +56,7 @@ func TestServer_DeleteUser(t *testing.T) {
 		},
 		{
 			name: "Invalid arguments",
-			r: &pb.DeleteUserRequest{
+			r: &v1.DeleteUserRequest{
 				AuthUid: util.RandomUID(),
 				Uid:     "",
 			},
@@ -64,7 +64,7 @@ func TestServer_DeleteUser(t *testing.T) {
 				db.AssertNotCalled(t, "GetUser")
 				db.AssertNotCalled(t, "Transaction")
 			},
-			checkResponse: func(t *testing.T, res *pb.DeleteUserResponse, err error) {
+			checkResponse: func(t *testing.T, res *v1.DeleteUserResponse, err error) {
 				assert.Error(t, err)
 				st, ok := status.FromError(err)
 				assert.True(t, ok)
@@ -73,7 +73,7 @@ func TestServer_DeleteUser(t *testing.T) {
 		},
 		{
 			name: "Not found",
-			r: &pb.DeleteUserRequest{
+			r: &v1.DeleteUserRequest{
 				AuthUid: util.RandomUID(),
 				Uid:     uid.Hex(),
 			},
@@ -84,7 +84,7 @@ func TestServer_DeleteUser(t *testing.T) {
 
 				db.AssertNotCalled(t, "Transaction")
 			},
-			checkResponse: func(t *testing.T, res *pb.DeleteUserResponse, err error) {
+			checkResponse: func(t *testing.T, res *v1.DeleteUserResponse, err error) {
 				assert.Error(t, err)
 				st, ok := status.FromError(err)
 				assert.True(t, ok)
@@ -93,7 +93,7 @@ func TestServer_DeleteUser(t *testing.T) {
 		},
 		{
 			name: "Internal error",
-			r: &pb.DeleteUserRequest{
+			r: &v1.DeleteUserRequest{
 				AuthUid: util.RandomUID(),
 				Uid:     uid.Hex(),
 			},
@@ -104,7 +104,7 @@ func TestServer_DeleteUser(t *testing.T) {
 
 				db.AssertNotCalled(t, "Transaction")
 			},
-			checkResponse: func(t *testing.T, res *pb.DeleteUserResponse, err error) {
+			checkResponse: func(t *testing.T, res *v1.DeleteUserResponse, err error) {
 				assert.Error(t, err)
 				st, ok := status.FromError(err)
 				assert.True(t, ok)

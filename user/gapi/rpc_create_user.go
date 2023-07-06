@@ -5,8 +5,8 @@ import (
 	"errors"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
+	"github.com/Dejan91/inventory-management/proto/v1"
 	"github.com/Dejan91/inventory-management/user/model"
-	"github.com/Dejan91/inventory-management/user/pb"
 	"github.com/Dejan91/inventory-management/user/val"
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *Server) CreateUser(ctx context.Context, r *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (s *Server) CreateUser(ctx context.Context, r *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
 	if violations := validateCreateUserRequest(r); violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
@@ -57,7 +57,7 @@ func (s *Server) CreateUser(ctx context.Context, r *pb.CreateUserRequest) (*pb.C
 		return nil, status.Errorf(codes.Internal, "failed to create user: %s", err)
 	}
 
-	response := &pb.CreateUserResponse{
+	response := &v1.CreateUserResponse{
 		Uid:         dbUser.ID.Hex(),
 		ExternalUid: firebaseUser.UID,
 		Username:    dbUser.Username,
@@ -67,7 +67,7 @@ func (s *Server) CreateUser(ctx context.Context, r *pb.CreateUserRequest) (*pb.C
 	return response, nil
 }
 
-func validateCreateUserRequest(r *pb.CreateUserRequest) []*errdetails.BadRequest_FieldViolation {
+func validateCreateUserRequest(r *v1.CreateUserRequest) []*errdetails.BadRequest_FieldViolation {
 	var violations []*errdetails.BadRequest_FieldViolation
 
 	if r.GetAuthUid() == "" {

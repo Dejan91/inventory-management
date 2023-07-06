@@ -5,8 +5,8 @@ import (
 	"errors"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
+	"github.com/Dejan91/inventory-management/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/model"
-	"github.com/Dejan91/inventory-management/user/pb"
 	"github.com/Dejan91/inventory-management/user/val"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *Server) UpdateUser(ctx context.Context, r *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+func (s *Server) UpdateUser(ctx context.Context, r *v1.UpdateUserRequest) (*v1.UpdateUserResponse, error) {
 	if violations := validateUpdateUserRequest(r); violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
@@ -60,7 +60,7 @@ func (s *Server) UpdateUser(ctx context.Context, r *pb.UpdateUserRequest) (*pb.U
 		return nil, status.Errorf(codes.Internal, "failed to create user: %s", err)
 	}
 
-	return &pb.UpdateUserResponse{
+	return &v1.UpdateUserResponse{
 		Uid:         u.ID.Hex(),
 		ExternalUid: u.ExternalID,
 		Username:    u.Username,
@@ -68,7 +68,7 @@ func (s *Server) UpdateUser(ctx context.Context, r *pb.UpdateUserRequest) (*pb.U
 	}, nil
 }
 
-func validateUpdateUserRequest(r *pb.UpdateUserRequest) []*errdetails.BadRequest_FieldViolation {
+func validateUpdateUserRequest(r *v1.UpdateUserRequest) []*errdetails.BadRequest_FieldViolation {
 	var violations []*errdetails.BadRequest_FieldViolation
 
 	if r.GetAuthUid() == "" {

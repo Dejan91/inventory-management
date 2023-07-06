@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/Dejan91/inventory-management/user/api";
+
+message GetUserRequest {
+  string uid = 1;
+}
+
+message GetUserResponse {
+  string uid = 1;
+  string external_uid = 2;
+  string username = 3;
+  string email = 4;
+}

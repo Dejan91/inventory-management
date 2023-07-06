@@ -3,9 +3,9 @@ package gapi
 import (
 	"context"
 	"firebase.google.com/go/v4/auth"
+	"github.com/Dejan91/inventory-management/proto/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/mocks"
 	"github.com/Dejan91/inventory-management/user/model"
-	"github.com/Dejan91/inventory-management/user/pb"
 	"github.com/Dejan91/inventory-management/user/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -27,13 +27,13 @@ func TestServer_CreateUser(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		r             *pb.CreateUserRequest
+		r             *v1.CreateUserRequest
 		buildStubs    func(db *mocks.MockDB, store *mocks.MockFirebaseStore)
-		checkResponse func(t *testing.T, res *pb.CreateUserResponse, err error)
+		checkResponse func(t *testing.T, res *v1.CreateUserResponse, err error)
 	}{
 		{
 			name: "OK",
-			r: &pb.CreateUserRequest{
+			r: &v1.CreateUserRequest{
 				AuthUid:  util.RandomUID(),
 				Username: username,
 				Email:    email,
@@ -70,7 +70,7 @@ func TestServer_CreateUser(t *testing.T) {
 						Username:   username,
 					}, nil)
 			},
-			checkResponse: func(t *testing.T, res *pb.CreateUserResponse, err error) {
+			checkResponse: func(t *testing.T, res *v1.CreateUserResponse, err error) {
 				assert.NoError(t, err)
 				assert.NotNil(t, res)
 
@@ -82,7 +82,7 @@ func TestServer_CreateUser(t *testing.T) {
 		},
 		{
 			"Duplicate username",
-			&pb.CreateUserRequest{
+			&v1.CreateUserRequest{
 				AuthUid:  util.RandomUID(),
 				Username: username,
 				Email:    email,
@@ -107,7 +107,7 @@ func TestServer_CreateUser(t *testing.T) {
 				db.AssertNotCalled(t, "CreateUser")
 				store.AssertNotCalled(t, "CreateUser")
 			},
-			func(t *testing.T, res *pb.CreateUserResponse, err error) {
+			func(t *testing.T, res *v1.CreateUserResponse, err error) {
 				assert.Error(t, err)
 				st, ok := status.FromError(err)
 				require.True(t, ok)
@@ -116,7 +116,7 @@ func TestServer_CreateUser(t *testing.T) {
 		},
 		{
 			"Invalid email",
-			&pb.CreateUserRequest{
+			&v1.CreateUserRequest{
 				AuthUid:  util.RandomUID(),
 				Username: username,
 				Email:    "invalid-email",
@@ -127,7 +127,7 @@ func TestServer_CreateUser(t *testing.T) {
 				db.AssertNotCalled(t, "CreateUser")
 				store.AssertNotCalled(t, "CreateUser")
 			},
-			func(t *testing.T, res *pb.CreateUserResponse, err error) {
+			func(t *testing.T, res *v1.CreateUserResponse, err error) {
 				assert.Error(t, err)
 				st, ok := status.FromError(err)
 				require.True(t, ok)
@@ -136,7 +136,7 @@ func TestServer_CreateUser(t *testing.T) {
 		},
 		{
 			"Internal error",
-			&pb.CreateUserRequest{
+			&v1.CreateUserRequest{
 				AuthUid:  util.RandomUID(),
 				Username: username,
 				Email:    email,
@@ -150,7 +150,7 @@ func TestServer_CreateUser(t *testing.T) {
 				db.AssertNotCalled(t, "CreateUser")
 				store.AssertNotCalled(t, "CreateUser")
 			},
-			func(t *testing.T, res *pb.CreateUserResponse, err error) {
+			func(t *testing.T, res *v1.CreateUserResponse, err error) {
 				assert.Error(t, err)
 				st, ok := status.FromError(err)
 				require.True(t, ok)

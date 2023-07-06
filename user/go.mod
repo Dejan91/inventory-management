@@ -1,6 +1,6 @@
 module github.com/Dejan91/inventory-management/user
 
-go 1.19
+go 1.20
 
 require (
 	firebase.google.com/go/v4 v4.7.1

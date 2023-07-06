@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/Dejan91/inventory-management/user/pb"
+	"github.com/Dejan91/inventory-management/user/api/v1"
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -13,7 +13,7 @@ import (
 
 const returnMessage = "User deleted"
 
-func (s *Server) DeleteUser(ctx context.Context, r *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
+func (s *Server) DeleteUser(ctx context.Context, r *v1.DeleteUserRequest) (*v1.DeleteUserResponse, error) {
 	if violations := validateDeleteUserRequest(r); violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
@@ -43,12 +43,12 @@ func (s *Server) DeleteUser(ctx context.Context, r *pb.DeleteUserRequest) (*pb.D
 		return nil, status.Errorf(codes.Internal, "failed to delete user: %s", err)
 	}
 
-	return &pb.DeleteUserResponse{
+	return &v1.DeleteUserResponse{
 		Message: returnMessage,
 	}, nil
 }
 
-func validateDeleteUserRequest(r *pb.DeleteUserRequest) []*errdetails.BadRequest_FieldViolation {
+func validateDeleteUserRequest(r *v1.DeleteUserRequest) []*errdetails.BadRequest_FieldViolation {
 	var violations []*errdetails.BadRequest_FieldViolation
 
 	if r.GetAuthUid() == "" {

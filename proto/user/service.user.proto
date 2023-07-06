@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package v1;
+
+import "get_user.proto";
+import "create_user.proto";
+import "update_user.proto";
+import "delete_user.proto";
+
+option go_package = "github.com/Dejan91/inventory-management/proto/user/api/v1";
+
+service User {
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {}
+}

@@ -5,14 +5,14 @@ import (
 	"errors"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
-	"github.com/Dejan91/inventory-management/user/pb"
+	"github.com/Dejan91/inventory-management/user/api/v1"
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func (s *Server) GetUser(ctx context.Context, r *pb.GetUserRequest) (*pb.GetUserResponse, error) {
+func (s *Server) GetUser(ctx context.Context, r *v1.GetUserRequest) (*v1.GetUserResponse, error) {
 	if violations := validateGetUserRequest(r); violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
@@ -33,7 +33,7 @@ func (s *Server) GetUser(ctx context.Context, r *pb.GetUserRequest) (*pb.GetUser
 		return nil, status.Errorf(codes.Internal, "failed to get user from firestore: %s", err)
 	}
 
-	return &pb.GetUserResponse{
+	return &v1.GetUserResponse{
 		Uid:         user.ID.Hex(),
 		ExternalUid: user.ExternalID,
 		Username:    user.Username,
@@ -41,7 +41,7 @@ func (s *Server) GetUser(ctx context.Context, r *pb.GetUserRequest) (*pb.GetUser
 	}, nil
 }
 
-func validateGetUserRequest(r *pb.GetUserRequest) []*errdetails.BadRequest_FieldViolation {
+func validateGetUserRequest(r *v1.GetUserRequest) []*errdetails.BadRequest_FieldViolation {
 	var violations []*errdetails.BadRequest_FieldViolation
 
 	if r.GetAuthUid() == "" {
