@@ -12,7 +12,6 @@ message CreateUserRequest {
 
 message CreateUserResponse {
   string uid = 1;
-  string external_uid = 2;
   string username = 3;
   string email = 4;
 }

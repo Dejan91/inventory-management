@@ -5,7 +5,7 @@ import (
 	"errors"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
-	"github.com/Dejan91/inventory-management/proto/user/api/v1"
+	v1 "github.com/Dejan91/inventory-management/proto/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/model"
 	"github.com/Dejan91/inventory-management/user/val"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -63,8 +63,8 @@ func (s *Server) UpdateUser(ctx context.Context, r *v1.UpdateUserRequest) (*v1.U
 	return &v1.UpdateUserResponse{
 		Uid:         u.ID.Hex(),
 		ExternalUid: u.ExternalID,
-		Username:    u.Username,
-		Email:       firestoreUser.Email,
+		Username:    r.GetUsername(),
+		Email:       r.GetEmail(),
 	}, nil
 }
 

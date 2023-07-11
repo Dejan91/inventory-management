@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	firebase.google.com/go/v4 v4.7.1
-	github.com/Dejan91/inventory-management/proto v0.0.0-20230706160033-aa9f343432dc
+	github.com/Dejan91/inventory-management/proto v0.0.0-20230706170939-f49cff4fb38a
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/testify v1.8.4
 	go.mongodb.org/mongo-driver v1.12.0

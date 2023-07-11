@@ -33,6 +33,7 @@ func NewMongoDB(username, password, host, dbName string) (DB, error) {
 
 	ctx := context.Background()
 	fmt.Println("connecting to mongodb")
+	// TODO:: Do once
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		return nil, err

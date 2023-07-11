@@ -2,7 +2,7 @@ package gapi
 
 import (
 	"fmt"
-	"github.com/Dejan91/inventory-management/proto/user/api/v1"
+	v1 "github.com/Dejan91/inventory-management/proto/user/api/v1"
 	"github.com/Dejan91/inventory-management/user/db"
 	"github.com/Dejan91/inventory-management/user/store"
 	"github.com/Dejan91/inventory-management/user/util"

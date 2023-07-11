@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v4.23.2
-// source: service.user.proto
+// source: server.user.proto
 
 package user
 

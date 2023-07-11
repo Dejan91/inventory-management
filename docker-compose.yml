@@ -9,7 +9,7 @@ services:
       - user
     restart: always
     ports:
-      - "9000:9000"
+      - "9090:9090"
     volumes:
       - ./gateway:/app
 
@@ -21,7 +21,7 @@ services:
       - mongo
     restart: always
     ports:
-      - "9090:9090"
+      - "9091:9090"
     volumes:
       - ./user:/app
 

@@ -1,5 +1,5 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/store-app.js'
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/store-auth.js"
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js'
+import {getAuth, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyAbGRjnPPIOyHj0vUlMYb10V8d32OJpzxY",
@@ -21,7 +21,7 @@ loginBtn.addEventListener("click", function (e) {
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user
-            const firebaseIDToken = document.getElementById("store-id-token")
+            const firebaseIDToken = document.getElementById("firebase-id-token")
 
             firebaseIDToken.innerHTML = `Firebase ID token: ${user.accessToken}`
         })

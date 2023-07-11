@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/Dejan91/inventory-management/user/db"
 	"github.com/Dejan91/inventory-management/user/gapi"
 	"github.com/Dejan91/inventory-management/user/store"
@@ -21,7 +20,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("user service")
 	mongoDB, err := db.NewMongoDB(config.DBUser, config.DBPassword, config.DBHost, config.DBName)
 	if err != nil {
 		panic(err)

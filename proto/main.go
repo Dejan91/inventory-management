@@ -1,7 +1,9 @@
 package proto
 
-import "fmt"
+import (
+	"log"
+)
 
 func main() {
-	fmt.Println("Proto service started...")
+	log.Printf("Proto server started...")
 }
