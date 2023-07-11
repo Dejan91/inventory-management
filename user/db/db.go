@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"go.mongodb.org/mongo-driver/mongo/writeconcern"
+	"sync"
 )
 
 type DB interface {
@@ -25,6 +26,10 @@ type MongoDB struct {
 }
 
 func NewMongoDB(username, password, host, dbName string) (DB, error) {
+	var once sync.Once
+	var client *mongo.Client
+	var err error
+
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:27017/?maxPoolSize=20&w=majority",
 		username,
 		password,
@@ -33,8 +38,12 @@ func NewMongoDB(username, password, host, dbName string) (DB, error) {
 
 	ctx := context.Background()
 	fmt.Println("connecting to mongodb")
-	// TODO:: Do once
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	once.Do(func() {
+		client, err = mongo.Connect(ctx, options.Client().ApplyURI(uri))
+		if err != nil {
+			return
+		}
+	})
 	if err != nil {
 		return nil, err
 	}
